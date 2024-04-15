@@ -1,0 +1,5 @@
+BATCH_SIZE = 32
+train_start_date = 2020-7-1
+train_end_date = 2020-7-1
+validation_start_date = 2020-7-31
+validation_end_date = 2020-7-31
