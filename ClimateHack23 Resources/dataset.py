@@ -3,8 +3,8 @@ from datetime import datetime, time, timedelta
 from torch.utils.data import IterableDataset
 
 class Dataset(IterableDataset):
-    def __init__(self, pv = None, hrv = None, site_locations = None,
-                 is_incident=False, start_date = "2020-7-1", end_date = "2020-7-30",
+    def __init__(self, pv, hrv, site_locations,
+                 is_incident= False, start_date = "2020-7-1", end_date = "2020-7-30",
                    crop_size = 1, horizon = 1, sites=None):
         self.pv = pv
         self.hrv = hrv
@@ -48,9 +48,9 @@ class Dataset(IterableDataset):
 
             # PV power output in first hour
             if self.is_incident:
-                pv_features = self.pv.xs(first_hour, drop_level=False)
-            else:  
                 pv_features = self.pv.xs(first_hour, drop_level=False)[["power", "angle_of_incidence_radians"]]
+            else:  
+                pv_features = self.pv.xs(first_hour, drop_level=False)
 
             # PV power output in the next 48 hours
             pv_targets = self.pv.xs(
