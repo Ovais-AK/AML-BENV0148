@@ -30,7 +30,7 @@ class BasicBlock(nn.Module):
 
 class ResNetModel(nn.Module):
     
-    def __init__(self, block, layers, predict_length=48, pv=None,pv_inc=None, use_pv_inc=None):
+    def __init__(self, block, layers, predict_length=48):
         
         super(ResNetModel, self).__init__()
         self.in_channels = 12 #reduce the stride
@@ -57,7 +57,7 @@ class ResNetModel(nn.Module):
             layers.append(block(self.in_channels, out_channels))
         return nn.Sequential(*layers)
 
-    def forward(self,hrv, pv=pv, pv_inc=pv_inc,  use_pv_inc=use_pv_inc):
+    def forward(self,hrv, pv=None, pv_inc=None,  use_pv_inc=False):
         
         x = self.initial(hrv)
         #x = self.maxpool(x)
