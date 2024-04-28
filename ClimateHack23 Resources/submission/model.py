@@ -6,7 +6,7 @@ import torch.nn as nn
 #########################################
 
 
-class Model(torch.nn.Module):
+class CNN(torch.nn.Module):
     def __init__(self) -> None:
         super().__init__()
 

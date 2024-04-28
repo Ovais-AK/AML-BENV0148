@@ -3,11 +3,12 @@ from datetime import datetime, time, timedelta
 from torch.utils.data import IterableDataset
 
 class ChallengeDataset(IterableDataset):
-    def __init__(self, pv, hrv, site_locations, start_date = "2020-7-1", end_date = "2020-7-30", sites=None):
+    def __init__(self, pv, hrv, site_locations, hrv_buffer = 1, start_date = "2020-7-1", end_date = "2020-7-30", sites=None):
         self.pv = pv
         self.hrv = hrv
+        self.hrv_buffer = hrv_buffer
         self._site_locations = site_locations
-        self._sites = sites if sites else list(site_locations["hrv"].keys())#This gets the individual site ids which are stored as the dict's keys
+        self._sites = sites if sites else list(site_locations["hrv"].keys())
         self.start_date = list(map(int, start_date.split("-")))
         self.end_date= list(map(int, end_date.split("-")))
 
@@ -66,9 +67,9 @@ class ChallengeDataset(IterableDataset):
                  
                     # Get a HRV crop centred on the site over the previous hour
                     x, y = self._site_locations["hrv"][site]
-                    hrv_features = hrv_data[:, y - 1  : y + 1 ,
-                                             x - 1  : x + 1 , 0]
-                    assert hrv_features.shape == (12, 2, 2)
+                    hrv_features = hrv_data[:, y - self.hrv_buffer  : y + self.hrv_buffer ,
+                                             x - self.hrv_buffer  : x + self.hrv_buffer , 0]
+                    assert hrv_features.shape == (12, 2*self.hrv_buffer, 2*self.hrv_buffer)
 
                 except:
                     continue
